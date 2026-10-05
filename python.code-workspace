@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../vs code/python"
+		},
+		{
+			"path": "../vs code/tournament_app"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Indicwars"
+	}
+}

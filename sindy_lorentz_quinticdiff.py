@@ -1,0 +1,159 @@
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+from scipy.interpolate import UnivariateSpline
+
+# ==========================================
+# 1. Load the Upscaled Dataset
+# ==========================================
+base_dir = os.path.dirname(os.path.abspath(__file__))
+csv_path = os.path.join(base_dir, 'Lorentz_attractor50_0_001.csv')
+
+if not os.path.exists(csv_path):
+    raise FileNotFoundError(f"Could not find the dataset at: {csv_path}")
+
+df = pd.read_csv(csv_path)
+t = df['Time_s'].values
+X = df[['X', 'Y', 'Z']].values
+dt = t[1] - t[0]  # Sampling interval (0.001s)
+
+N, num_vars = X.shape
+print(f"Loaded {N} data points at a resolution of {dt}s.")
+
+# ==========================================
+# 2. Compute Derivatives via Quintic Smoothing Spline
+# ==========================================
+# Replaces the 4th-order finite difference stencil with analytical 
+# derivatives from a 5th-degree piece-wise smoothing spline.
+dX = np.zeros((N, num_vars))
+
+# Smoothing tolerance factor. Adjust 's' if needed:
+# s = 0 forces pure interpolation (highly sensitive to microscopic noise).
+# s > 0 allows structural filtering. Clean 0.001s Lorenz lines perform well with s=0.01.
+s_param = 0.01 
+
+for col in range(num_vars):
+    # k=5 sets the polynomial degree to quintic
+    spline_fit = UnivariateSpline(t, X[:, col], k=5, s=s_param)
+    
+    # Extract the exact analytical 1st derivative structure
+    spline_derivative = spline_fit.derivative(n=1)
+    
+    # Evaluate across the uniform timeline
+    dX[:, col] = spline_derivative(t)
+
+# ==========================================
+# 3. Construct the Custom Polynomial Library
+# ==========================================
+# Generates columns: [1, x, y, z, x^2, xy, xz, y^2, yz, z^2]
+x_col = X[:, 0]
+y_col = X[:, 1]
+z_col = X[:, 2]
+
+Theta = np.column_stack([
+    np.ones(N),              # 1
+    x_col, y_col, z_col,     # x, y, z
+    x_col**2, x_col*y_col,   # x^2, xy
+    x_col*z_col, y_col**2,   # xz, y^2
+    y_col*z_col, z_col**2    # yz, z^2
+])
+
+library_labels = ['1', 'x', 'y', 'z', 'x^2', 'xy', 'xz', 'y^2', 'yz', 'z^2']
+
+# ==========================================
+# 4. Sequential Thresholded Least Squares (STLS)
+# ==========================================
+lambda_thresh = 0.88  # Sparsity penalty cut-off
+max_iterations = 15
+
+# Step A: Initial unregularized baseline least-squares regression
+Xi = np.linalg.lstsq(Theta, dX, rcond=None)[0]
+
+# Step B: Iteratively threshold small coefficients and re-solve
+for iteration in range(max_iterations):
+    small_indices = np.abs(Xi) < lambda_thresh
+    Xi[small_indices] = 0  # Clip small values to absolute zero
+    
+    # Re-evaluate the survivors independently for each state variable
+    for var in range(num_vars):
+        big_indices = ~small_indices[:, var]
+        
+        # Re-solve least-squares on active features only
+        Xi[big_indices, var] = np.linalg.lstsq(Theta[:, big_indices], dX[:, var], rcond=None)[0]
+
+# ==========================================
+# 5. Display Discovered Symbolic Equations
+# ==========================================
+print("\n=========================================")
+print("  SINDy Identified Equations (Scratch)")
+print("=========================================")
+state_names = ['dX/dt', 'dY/dt', 'dZ/dt']
+
+for var in range(num_vars):
+    eq_str = f"{state_names[var]} = "
+    terms = []
+    for term_idx, label in enumerate(library_labels):
+        coef = Xi[term_idx, var]
+        if np.abs(coef) > 1e-4:
+            terms.append(f"{coef:.4f}*{label}" if label != '1' else f"{coef:.4f}")
+    eq_str += " + ".join(terms).replace("+ -", "- ") if terms else "0"
+    print(eq_str)
+print("=========================================\n")
+
+# ==========================================
+# 6. Extrapolate Out to 50 Seconds
+# ==========================================
+print("Running comparative 50-second ODE simulations...")
+t_eval = np.arange(0.0, 50.0, 0.01)
+initial_state = X[0, :]  # Initial position: [1.0, 1.0, 1.0]
+
+# --- A. True Lorenz Vector Field Function ---
+def true_lorenz(t, state):
+    sigma, rho, beta = 10.0, 28.0, 8.0/3.0
+    return [
+        sigma * (state[1] - state[0]),
+        state[0] * (rho - state[2]) - state[1],
+        state[0] * state[1] - beta * state[2]
+    ]
+
+sol_true = solve_ivp(true_lorenz, (0, 50), initial_state, t_eval=t_eval, method='RK45')
+
+# --- B. Custom SINDy Evaluator Function ---
+def discovered_sindy_ode(t, state):
+    x, y, z = state
+    # Map current state variables to the same library format as Theta
+    theta_row = np.array([1, x, y, z, x**2, x*y, x*z, y**2, y*z, z**2])
+    # Compute derivative vector using your sparse coefficient matrix
+    return theta_row @ Xi
+
+sol_sindy = solve_ivp(discovered_sindy_ode, (0, 50), initial_state, t_eval=t_eval, method='RK45')
+
+# ==========================================
+# 7. Unified Visual Comparison Plot
+# ==========================================
+fig = plt.figure(figsize=(15, 7))
+
+# Subplot 1: 3D Trajectory Superposition
+ax1 = fig.add_subplot(1, 2, 1, projection='3d')
+ax1.plot(sol_true.y[0], sol_true.y[1], sol_true.y[2], color='#0055ff', linewidth=1.5, label='True Lorenz Simulation')
+ax1.plot(sol_sindy.y[0], sol_sindy.y[1], sol_sindy.y[2], color='#ff0e0e', linewidth=1.2, linestyle='-', label='SINDy Custom Model')
+ax1.set_xlabel('X Space')
+ax1.set_ylabel('Y Space')
+ax1.set_zlabel('Z Space')
+ax1.set_title('3D Phase Space Trajectory Trapping')
+ax1.legend()
+
+# Subplot 2: State X Coordinate Timeline Trace
+ax2 = fig.add_subplot(1, 2, 2)
+ax2.plot(sol_true.t, sol_true.y[0], color='#0055ff', linewidth=1.5, label='True Model')
+ax2.plot(sol_sindy.t, sol_sindy.y[0], color='#ff0e0e', linewidth=1.2, linestyle='-', label='SINDy Custom')
+ax2.set_xlabel('Time (s)')
+ax2.set_ylabel('X Coordinate')
+ax2.set_title('State X Temporal Dynamics Comparison')
+ax2.set_xlim([0, 50])
+ax2.legend()
+
+plt.tight_layout()
+plt.show()
