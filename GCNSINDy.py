@@ -21,7 +21,7 @@ else:
 # 1. Load Original Data (Low-Resolution Dataset)
 # ==============================================================================
 base_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(base_dir, 'Lorentz_attractor_dropped_2pct.csv') 
+csv_path = os.path.join(base_dir, 'Lorentz_attractor_dropped_10pct.csv') 
 
 if not os.path.exists(csv_path):
     raise FileNotFoundError(f"Could not find the base dataset at: {csv_path}")
