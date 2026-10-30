@@ -16,8 +16,8 @@ import numpy as np
 # ============================================================
 # SETTINGS — change these values as needed
 # ============================================================
-INPUT_FILE = "Lorentz_attractor_5s_0.010_rate.csv"
-DROP_PERCENT = 2      # <-- percentage of rows to randomly drop (0-100)
+INPUT_FILE = "Lorentz_attractor_20s_0.010_rate.csv"
+DROP_PERCENT = 10     # <-- percentage of rows to randomly drop (0-100)
 RANDOM_SEED = 42       # <-- keep fixed for reproducible results, or set to None for a new random drop each run
 # ============================================================
 

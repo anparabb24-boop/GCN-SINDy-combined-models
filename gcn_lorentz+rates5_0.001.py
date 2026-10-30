@@ -23,7 +23,7 @@ else:
 # 1. Load Data & Compute Ground Truth Gradients
 # ==========================================
 base_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(base_dir, 'Lorentz_attractor_5s_0.010_rate.csv') 
+csv_path = os.path.join(base_dir, 'Lorentz_attractor_20s_0.010_rate.csv') 
 
 df = pd.read_csv(csv_path)
 data = df[['X', 'Y', 'Z']].values 

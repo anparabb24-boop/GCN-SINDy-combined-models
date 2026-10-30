@@ -9,7 +9,7 @@ from scipy.interpolate import UnivariateSpline
 # 1. Load the Upscaled Dataset
 # ==========================================
 base_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(base_dir, 'Lorentz_attractor50_0_001.csv')
+csv_path = os.path.join(base_dir, 'Lorentz_attractor_dropped_10pct.csv')
 
 if not os.path.exists(csv_path):
     raise FileNotFoundError(f"Could not find the dataset at: {csv_path}")

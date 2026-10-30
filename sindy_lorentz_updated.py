@@ -47,8 +47,8 @@ library_labels = ['1', 'x', 'y', 'z', 'x^2', 'xy', 'xz', 'y^2', 'yz', 'z^2']
 # ==========================================
 # 3. Sequential Thresholded Least Squares (STLS)
 # ==========================================
-lambda_thresh = 0.801  # Sparsity penalty cut-off
-max_iterations = 15
+lambda_thresh = 0.5  # Sparsity penalty cut-off
+max_iterations = 1
 
 # Step A: Initial unregularized baseline least-squares regression
 Xi = np.linalg.lstsq(Theta, dX, rcond=None)[0]

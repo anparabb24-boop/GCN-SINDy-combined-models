@@ -8,7 +8,7 @@ from scipy.integrate import solve_ivp
 # 1. Load the Upscaled Dataset
 # ==========================================
 base_dir = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(base_dir, 'Lorentz_attractor50_0_001.csv')
+csv_path = os.path.join(base_dir, 'Lorentz_attractor_dropped_10pct.csv')
 
 if not os.path.exists(csv_path):
     raise FileNotFoundError(f"Could not find the dataset at: {csv_path}")
@@ -58,8 +58,8 @@ library_labels = ['1', 'x', 'y', 'z', 'x^2', 'xy', 'xz', 'y^2', 'yz', 'z^2']
 # ==========================================
 # 4. Sequential Thresholded Least Squares (STLS)
 # ==========================================
-lambda_thresh = 0.88  # Sparsity penalty cut-off
-max_iterations = 15
+lambda_thresh = 0.21  # Sparsity penalty cut-off
+max_iterations = 60
 
 # Step A: Initial unregularized baseline least-squares regression
 Xi = np.linalg.lstsq(Theta, dX, rcond=None)[0]
