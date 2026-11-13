@@ -1,9 +1,0 @@
-{
-  "bus": "B2",
-  "generator": "G2",
-  "samples": 301,
-  "median_relative_complex_power_error": 0.0006215997419661309,
-  "median_P_measured_W": 178836406.998605,
-  "median_P_from_generator_phasors_W": 178849151.6014947,
-  "current_sign_used": "negative of 3*V1*conj(I1), matching generator export at G2/B2"
-}

@@ -1,5 +1,0 @@
-name,bus,p_mw,q_mvar,connection,parameterization,neutral_connection,source_block_sid
-Load A,5,125,50,Wye,P-Q,Electrical Reference,1931
-Load B,6,90,30,Wye,P-Q,Electrical Reference,1932
-Load C,8,100,35,Wye,P-Q,Electrical Reference,1933
-Extra 50 MW,6,50,0,Wye,Rated power; component_structure_PQ=R (constant impedance),Electrical Reference SID 3402; Qpos=30 MVAr inactive for R structure,3401

@@ -1,0 +1,84 @@
+{
+  "source_model": "/Users/Arya/Desktop/IEEE9BusSystem.slx",
+  "source_read_only": true,
+  "extraction_method": "Read-only inspection of Simulink SLX ZIP/XML; linked library definitions and mask values not resolved",
+  "generators": {
+    "G1": {
+      "bus": {"value": 1, "evidence": "generator caption Gen1@Bus1", "status": "inferred from caption"},
+      "machine_block": {"value": "ee_lib/Electromechanical/Synchronous/Synchronous Machine Salient Pole", "status": "visible"},
+      "implementation_order": null,
+      "rated_apparent_power_MVA": null,
+      "rated_voltage_kV": null,
+      "rated_frequency_Hz": null,
+      "pole_pairs": null,
+      "Rs_d": null, "Rs_q": null, "Xd": null, "Xq": null,
+      "Xd_prime": null, "Xd_double_prime": null, "Xq_prime": null, "Xq_double_prime": null,
+      "Td0_prime_s": null, "Td0_double_prime_s": null, "Tq0_prime_s": null, "Tq0_double_prime_s": null,
+      "field_windings": null, "damper_windings": null, "H_s": null, "D": null,
+      "mechanical_input_sign": null, "initialization_settings": null,
+      "avr_Vref_pu": 1.04,
+      "governor_Pref_expression": "76.4/247.5",
+      "unresolved": ["machine order and winding configuration", "all machine electrical parameters and bases", "nameplate ratings and pole pairs", "H and D", "mechanical sign", "load-flow and initial-state settings", "controller library mask values"]
+    },
+    "G2": {
+      "bus": {"value": 2, "evidence": "generator caption Gen2@Bus2", "status": "inferred from caption"},
+      "machine_block": {"value": "ee_lib/Electromechanical/Synchronous/Synchronous Machine Round Rotor", "status": "visible"},
+      "implementation_order": null,
+      "rated_apparent_power_MVA": null,
+      "rated_voltage_kV": null,
+      "rated_frequency_Hz": null,
+      "pole_pairs": null,
+      "Rs_d": null, "Rs_q": null, "Xd": null, "Xq": null,
+      "Xd_prime": null, "Xd_double_prime": null, "Xq_prime": null, "Xq_double_prime": null,
+      "Td0_prime_s": null, "Td0_double_prime_s": null, "Tq0_prime_s": null, "Tq0_double_prime_s": null,
+      "field_windings": null, "damper_windings": null, "H_s": null, "D": null,
+      "mechanical_input_sign": null, "initialization_settings": null,
+      "avr_Vref_pu": 1.025,
+      "governor_Pref_expression": "76.4/247.5",
+      "caption_dispatch_MW": 163,
+      "caption_voltage_setpoint_pu": 1.025,
+      "bus_tag_voltage_pu": 1.070,
+      "rating_or_initialization_inconsistency": "generator caption 1.025 pu differs from Bus2 saved annotation 1.070 pu; basis/context unresolved",
+      "unresolved": ["machine order and winding configuration", "all machine electrical parameters and bases", "nameplate ratings and pole pairs", "H and D", "mechanical sign", "load-flow and initial-state settings", "controller library mask values"]
+    },
+    "G3": {
+      "bus": {"value": 3, "evidence": "generator caption Gen3@Bus3", "status": "inferred from caption"},
+      "machine_block": {"value": "ee_lib/Electromechanical/Synchronous/Synchronous Machine Round Rotor", "status": "visible"},
+      "implementation_order": null,
+      "rated_apparent_power_MVA": null,
+      "rated_voltage_kV": null,
+      "rated_frequency_Hz": null,
+      "pole_pairs": null,
+      "Rs_d": null, "Rs_q": null, "Xd": null, "Xq": null,
+      "Xd_prime": null, "Xd_double_prime": null, "Xq_prime": null, "Xq_double_prime": null,
+      "Td0_prime_s": null, "Td0_double_prime_s": null, "Tq0_prime_s": null, "Tq0_double_prime_s": null,
+      "field_windings": null, "damper_windings": null, "H_s": null, "D": null,
+      "mechanical_input_sign": null, "initialization_settings": null,
+      "avr_Vref_pu": 1.025,
+      "governor_Pref_expression": "76.4/247.5",
+      "caption_dispatch_MW": 85,
+      "caption_voltage_setpoint_pu": 1.025,
+      "bus_tag_voltage_pu": 1.025,
+      "unresolved": ["machine order and winding configuration", "all machine electrical parameters and bases", "nameplate ratings and pole pairs", "H and D", "mechanical sign", "load-flow and initial-state settings", "controller library mask values"]
+    }
+  },
+  "network": {
+    "lines": [
+      {"block": "B4 to B5 50 km", "length_km": 50, "r_l_c": null},
+      {"block": "B4 to B6 50 km", "length_km": 50, "r_l_c": null},
+      {"block": "B5 to B7 100 km", "length_km": 100, "r_l_c": null},
+      {"block": "B6 to B9 100 km", "length_km": 100, "r_l_c": null},
+      {"block": "B7 to B8 50 km", "length_km": 50, "r_l_c": null},
+      {"block": "B8 to B9 100 km", "length_km": 100, "r_l_c": null}
+    ],
+    "transformers": ["TF 4-1", "TF 7-2", "TF 9-3"],
+    "loads": [
+      {"block": "Load A 125 MW 50 MVAr", "P_MW": 125, "Q_MVAr": 50, "bus": null},
+      {"block": "Load B 90 MW 30 MVAr", "P_MW": 90, "Q_MVAr": 30, "bus": null},
+      {"block": "Load C 100 MW 35 MVAr", "P_MW": 100, "Q_MVAr": 35, "bus": null},
+      {"block": "50 MW", "P_MW": 50, "Q_MVAr": null, "bus": null}
+    ]
+  },
+  "fault": {"block_found": false, "phases": null, "resistance": null, "switching_times": null, "location": null},
+  "notes": ["Null means not exposed in the inspected archive; it is not zero.", "Generator bus association is caption-based inference.", "Library instance parameters are not serialized in inspected system XML."]
+}

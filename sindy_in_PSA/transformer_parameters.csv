@@ -1,4 +1,0 @@
-name,hv_bus,lv_bus,rating_mva,hv_kv_ll,lv_kv_ll,connection_hv,connection_lv,rw1_pu_own_base,rw2_pu_own_base,xl1_pu_own_base,xl2_pu_own_base,rm_pu_own_base,xm_pu_own_base,tap_pu,phase_shift_deg,phase_shift_status,source_block_sid
-TF4-1,4,1,100,230,16.5,Yn,Delta1,0.0001,0.0001,0.0288,0.0288,500,500,1,30,Inferred from Delta 1 clock convention; HV-side tap angle with V_HV/a=V_LV,1954
-TF7-2,7,2,100,230,18,Yn,Delta1,0.0001,0.0001,0.03125,0.03125,500,500,1,30,Inferred from Delta 1 clock convention; HV-side tap angle with V_HV/a=V_LV,1953
-TF9-3,9,3,100,230,13.8,Yn,Delta1,0.0001,0.0001,0.0293,0.0293,500,500,1,30,Inferred from Delta 1 clock convention; HV-side tap angle with V_HV/a=V_LV,1955

@@ -1,0 +1,11 @@
+# Local Python environment and generated interpreter files
+/bin/
+/include/
+/lib/
+/share/
+/pyvenv.cfg
+__pycache__/
+*.py[cod]
+
+# Finder metadata
+.DS_Store
